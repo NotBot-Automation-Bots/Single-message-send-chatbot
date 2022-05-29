@@ -38,7 +38,7 @@ def getGroupChatID(groupname):
 
 
 
-msg1 = "Hi \n\nThank you very much for responding to our ad as it is our duty at Nanopulse to provide top-quality service to people in need for a tattoo removal procedure, like you. \n\nWe know that having a tattoo can be something of a life-long commitment when you decide to have one, but it doesn't have to be that way when the tattoo isn't what you expected when it was finished.\n\nBefore we proceed, may I know what is the size of your tattoo?\n\nPlease choose below options\n\nReply 1 for Small Size \nReply 2 for Medium Size \nReply 3 for Large size"
+msg1 = "Hi  {}  \n\nThank you very much for responding to our ad as it is our duty at Nanopulse to provide top-quality service to people in need for a tattoo removal procedure, like you. \n\nWe know that having a tattoo can be something of a life-long commitment when you decide to have one, but it doesn't have to be that way when the tattoo isn't what you expected when it was finished.\n\nBefore we proceed, may I know what is the size of your tattoo?\n\nPlease choose below options\n\nReply 1 for Small Size \nReply 2 for Medium Size \nReply 3 for Large size"
 
 
 msg2 = "Thank you! Can you also send one clear picture of the tattoo?"
@@ -87,7 +87,7 @@ def handleWebhook():
                 chatid = msg['chatId']
                 sender = msg['author']
                 sender = sender[:-5]
-                group_obj = groups.find_one({'user_contact' : str(sender) , 'chatbot' : 1,"chat_bot_type" : "tatto_bot"})
+                group_obj = groups.find_one({'user_contact' : str(sender) , 'chatbot' : 1,"chat_bot_type" : "tatto_bot1"})
                 print(group_obj)
                 if group_obj is not None and (str(group_obj['customer']) == str(sender)):
                     filter = {'_id' : group_obj['_id']}
@@ -146,22 +146,22 @@ def create_group():
             grps = groups.find_one({
                 'phone_list': [customer],
                 "user_contact" : customer,
-                "chat_bot_type" : "tatto_bot",
+                "chat_bot_type" : "tatto_bot1",
                 })
             if(grps is None):
                 url = f"{mysec.API_URL}sendMessage?token={mysec.TOKEN}"
                 headers = {'Content-type': 'application/json'}
                 data = {
-                    "body": request_data['msg'],
+                    "body": msg1.format(request_data['msg']),
                     "phone": customer
                 }
                 resp = requests.post(url=url, headers=headers, data=json.dumps(data))
                 
-                data = {
-                    "body": msg1,
-                    "phone": customer
-                }
-                resp = requests.post(url=url, headers=headers, data=json.dumps(data))
+                # data = {
+                #     "body": msg1,
+                #     "phone": customer
+                # }
+                # resp = requests.post(url=url, headers=headers, data=json.dumps(data))
 
                 newGroup = {
                     # 'owner': owner,
@@ -170,7 +170,7 @@ def create_group():
                     "user_contact" : customer,
                     "chatbot" : chatbot_status,
                     "msg_sent": 0,
-                    "chat_bot_type" : "tatto_bot",
+                    "chat_bot_type" : "tatto_bot1",
                     }
                 groups.insert_one(newGroup)  
                 
